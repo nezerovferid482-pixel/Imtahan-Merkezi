@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="az">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Educentr İmtahan Mərkəzi</title>
+<style>
+body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; margin:0; padding:0; background:#f0f4f7; }
+header { background:#004aad; color:#fff; padding:15px; text-align:center; font-size:1.3em; font-weight:bold; }
+nav { display:flex; background:#0074cc; }
+nav button { flex:1; padding:15px; color:#fff; background:#0074cc; border:none; cursor:pointer; font-size:1em; transition:0.3s; }
+nav button.active { background:#005bb5; }
+.tab { display:none; padding:20px; }
+.tab.active { display:block; }
+.card { background:#fff; padding:20px; margin-bottom:20px; border-radius:8px; box-shadow:0 2px 6px rgba(0,0,0,0.1); }
+input, select { width:100%; padding:10px; margin:8px 0; border-radius:5px; border:1px solid #ccc; }
+button { padding:12px; margin-top:10px; background:#004aad; color:#fff; border:none; cursor:pointer; width:100%; border-radius:5px; font-size:1em; }
+button:hover { background:#003680; }
+.whatsapp-link { display:none; margin-top:15px; padding:15px; background:#e1f5fe; border-left:5px solid #0288d1; border-radius:5px; }
+.admin-section { background:#e3e3e3; padding:10px; margin-top:10px; border-radius:5px; max-height:300px; overflow:auto; }
+footer { text-align:center; padding:15px; background:#004aad; color:#fff; font-size:0.9em; }
+</style>
+</head>
+<body>
+<header>Educentr İmtahan Mərkəzi</header>
+<nav>
+<button class="tab-btn active" data-tab="bilet">Bilet Al</button>
+<button class="tab-btn" data-tab="admin">Admin Panel</button>
+</nav>
+
+<div id="bilet" class="tab active card">
+<h2>Bilet Al</h2>
+<input type="text" id="ad" placeholder="Adınız">
+<input type="text" id="soyad" placeholder="Soyadınız">
+<input type="text" id="elq" placeholder="Əlaqə nömrəsi">
+
+<label>İmtahan Növü:</label>
+<select id="imtahan">
+<option value="">Seçin</option>
+<option value="buraxlis">Buraxlış</option>
+<option value="bloks">Blok</option>
+<option value="yös">YÖS</option>
+<option value="miq">MiQ</option>
+<option value="magistr">Magistr</option>
+<option value="dovlet">Dövlət Qulluğu</option>
+<option value="lisey">Lisey</option>
+<option value="olimpiada">Olimpiada</option>
+<option value="bilik">Bilik Yarışı</option>
+<option value="qebul">İşə Qəbul</option>
+<option value="kurs">Kursa Qəbul</option>
+</select>
+
+<div id="sinif-container"></div>
+<div id="fenn-container"></div>
+<div id="hazirliq-container"></div>
+<button id="bilet-btn">Bilet Al</button>
+
+<div class="whatsapp-link">
+<p>Educentr Təhsil Mərkəzi sizi salamlayır və verəcəyiniz imtahanda uğurlar arzu edir.</p>
+<p>Nəzərinizə çatdırırıq ki, imtahan biletini təsdiq etmək üçün <strong>"Bilet Təsdiq et"</strong> düyməsində yönləndirilən WhatsApp qrupuna doldurduğunuz məlumatların ekran şəklini atın.</p>
+<p><a href="https://chat.whatsapp.com/KNts0VddCN38SWTOqKQbMY" target="_blank">WhatsApp Qrupuna Qoşul</a></p>
+</div>
+</div>
+
+<div id="admin" class="tab card">
+<h2>Admin Panel</h2>
+<input type="password" id="admin-pass" placeholder="Giriş Kodu">
+<button id="admin-login">Daxil Ol</button>
+<div class="admin-section" id="admin-data" style="display:none;"></div>
+<button id="reset-data" style="display:none;">Məlumatları Sıfırla</button>
+</div>
+
+<footer>Hörmətlə, Educentr İmtahan Mərkəzi</footer>
+
+<script>
+const tabs = document.querySelectorAll('.tab-btn');
+tabs.forEach(btn => {
+    btn.addEventListener('click', ()=>{
+        tabs.forEach(b=>b.classList.remove('active'));
+        btn.classList.add('active');
+        document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+        document.getElementById(btn.dataset.tab).classList.add('active');
+    });
+});
+
+const imtahan = document.getElementById('imtahan');
+const sinifContainer = document.getElementById('sinif-container');
+const fennContainer = document.getElementById('fenn-container');
+const hazirliqContainer = document.getElementById('hazirliq-container');
+
+imtahan.addEventListener('change', ()=>{
+    const val = imtahan.value;
+    sinifContainer.innerHTML='';
+    fennContainer.innerHTML='';
+    hazirliqContainer.innerHTML='';
+
+    if(val==='buraxlis'){
+        sinifContainer.innerHTML='<label>Sinif:</label><select id="sinif"><option>8</option><option>9</option><option>10</option><option>11</option></select>';
+        fennContainer.innerHTML='<label>Xarici Dil:</label><select id="fenn"><option>İngilis</option><option>Rus</option><option>Alman</option><option>Fransız</option></select>';
+    }
+    else if(val==='bloks'){
+        sinifContainer.innerHTML='<label>Sinif:</label><select id="sinif"><option>8</option><option>9</option><option>10</option><option>11</option></select>';
+        fennContainer.innerHTML='<label>Fənn:</label><select id="fenn"><option>İnformatika</option><option>Kimya</option><option>Tarix</option><option>Coğrafiya</option></select>';
+    }
+    else if(val==='miq'){
+        sinifContainer.innerHTML='<label>Sinif: M-001</label>';
+        fennContainer.innerHTML='<label>Fənn:</label><select id="fenn"><option>Riyaziyyat</option><option>Azərbaycan dili</option><option>Fizika</option><option>Kimya</option><option>Tarix</option><option>Biologiya</option><option>Coğrafiya</option><option>İngilis</option><option>Rus</option><option>Alman</option><option>Fransız</option></select>';
+    }
+    else if(val==='magistr'){
+        sinifContainer.innerHTML='<label>Sinif: Magistr-001</label>';
+        fennContainer.innerHTML='<label>Xarici Dil:</label><select id="fenn"><option>İngilis</option><option>Rus</option><option>Alman</option><option>Fransız</option></select>';
+    }
+    else if(val==='dovlet'){
+        sinifContainer.innerHTML='<label>Sinif: D-001</label>';
+        fennContainer.innerHTML='<label>Xarici Dil:</label><select id="fenn"><option>İngilis</option><option>Rus</option><option>Alman</option><option>Fransız</option></select>';
+    }
+    else if(val==='yös'){
+        sinifContainer.innerHTML='<label>Sinif: YÖS-001</label>';
+    }
+    else if(val==='lisey'){
+        sinifContainer.innerHTML='<label>Sinif:</label><select id="sinif"><option>3</option><option>4</option><option>5</option><option>6</option></select>';
+    }
+    else if(val==='olimpiada'){
+        sinifContainer.innerHTML='<label>Sinif:</label><select id="sinif"><option>2</option><option>3</option><option>4</option><option>5</option><option>6</option><option>7</option><option>8</option><option>9</option><option>10</option><option>11</option></select>';
+        fennContainer.innerHTML='<label>Fənn:</label><select id="fenn"><option>Riyaziyyat</option><option>Azərbaycan dili</option><option>Fizika</option><option>Kimya</option><option>Tarix</option><option>Biologiya</option><option>Coğrafiya</option><option>İnformatika</option><option>İngilis</option><option>Rus</option><option>Alman</option><option>Fransız</option></select>';
+    }
+    else if(val==='bilik'){
+        sinifContainer.innerHTML='<label>Sinif:</label><select id="sinif"><option>2</option><option>3</option><option>4</option><option>5</option><option>6</option><option>7</option><option>8</option><option>9</option><option>10</option><option>11</option></select>';
+        fennContainer.innerHTML='<label>Xarici Dil:</label><select id="fenn"><option>İngilis</option><option>Rus</option><option>Alman</option><option>Fransız</option></select>';
+    }
+    else if(val==='qebul'){
+        sinifContainer.innerHTML='<label>Sinif: HR-001</label>';
+        fennContainer.innerHTML='<label>Fənn:</label><select id="fenn"><option>Riyaziyyat</option><option>Azərbaycan dili</option><option>Fizika</option><option>Kimya</option><option>Tarix</option><option>Biologiya</option><option>Coğrafiya</option><option>İnformatika</option><option>İngilis</option><option>Rus</option><option>Alman</option><option>Fransız</option></select>';
+    }
+    else if(val==='kurs'){
+        sinifContainer.innerHTML='<label>Sinif:</label><select id="sinif"><option>2</option><option>3</option><option>4</option><option>5</option><option>6</option><option>7</option><option>8</option><option>9</option><option>10</option><option>11</option></select>';
+        hazirliqContainer.innerHTML='<label>Hazırlıq Növü:</label><select id="hazirliq"><option>Magistr Abturiyent</option><option>Dövlət Qulluğu Lisey</option><option>Olimpiada</option><option>YÖS</option></select>';
+    }
+});
+
+document.getElementById('bilet-btn').addEventListener('click', ()=>{
+    if(!document.getElementById('ad').value || !document.getElementById('soyad').value || !document.getElementById('elq').value){
+        alert('Zəhmət olmasa bütün məlumatları doldurun!');
+        return;
+    }
+    document.querySelector('.whatsapp-link').style.display='block';
+    alert('Bilet alındı! WhatsApp qrupuna yönləndirin.');
+});
+
+document.getElementById('admin-login').addEventListener('click', ()=>{
+    const pass = document.getElementById('admin-pass').value;
+    if(pass==='4083'){
+        document.getElementById('admin-data').style.display='block';
+        document.getElementById('reset-data').style.display='block';
+        document.getElementById('admin-data').innerHTML=localStorage.getItem('sagirdler') || 'Hələ məlumat yoxdur.';
+    } else alert('Yanlış kod!');
+});
+
+document.getElementById('reset-data').addEventListener('click', ()=>{
+    localStorage.removeItem('sagirdler');
+    document.getElementById('admin-data').innerHTML='Məlumatlar sıfırlandı!';
+});
+</script>
+</body>
+</html>
